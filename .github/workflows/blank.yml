@@ -1,5 +1,13 @@
-name: Build APK
-on: [push, workflow_dispatch]
+      - name: Set app icon
+        run: |
+          IMG=$(ls *.jpg *.jpeg *.png 2>/dev/null | head -1)
+          if [ -n "$IMG" ]; then
+            sudo apt-get install -y imagemagick > /dev/null
+            mkdir -p TapMap/app/src/main/res/mipmap-xxhdpi
+            convert "$IMG" -resize 144x144^ -gravity center -extent 144x144 TapMap/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          else
+            sed -i 's/android:icon="@mipmap\/ic_launcher" //' TapMap/app/src/main/AndroidManifest.xml
+          fion: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
